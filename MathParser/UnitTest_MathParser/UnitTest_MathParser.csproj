@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="UnitTest_Tokinize.cs" />
     <Compile Include="UnitTest_DoubleToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

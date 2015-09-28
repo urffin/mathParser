@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace MathParser.Tokens
 {
-    class DoubleToken
+    class DoubleToken : Token
     {
         double value;
-
-        int endPosition;
 
         bool isDecimalSeparatorSet = false;
         private readonly char DecimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
@@ -26,6 +24,11 @@ namespace MathParser.Tokens
             }
 
             return false;
+        }
+
+        public static bool IsStartSymbol(char symbol)
+        {
+            return (symbol >= '0' && symbol <= '9');
         }
         public DoubleToken(string source, int position = 0)
         {
