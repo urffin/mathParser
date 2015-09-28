@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -13,9 +14,18 @@ namespace MathParser.Tokens
 
         int endPosition;
 
-        protected bool CheckSymbol(char symbol)
+        bool isDecimalSeparatorSet = false;
+        private readonly char DecimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+        protected bool CheckSymbol(char symbol, int countSelectedChars)
         {
-            return true;
+            if (symbol != DecimalSeparator) return (symbol >= '0' && symbol <= '9');
+
+            if (!isDecimalSeparatorSet && countSelectedChars > 0)
+            {
+                return isDecimalSeparatorSet = true;
+            }
+
+            return false;
         }
         public DoubleToken(string source, int position = 0)
         {
@@ -25,13 +35,13 @@ namespace MathParser.Tokens
             while (position < source.Length)
             {
                 symbol = source[position];
-                if (!CheckSymbol(symbol)) break;
+                if (!CheckSymbol(symbol,sb.Length)) break;
 
                 sb.Append(symbol);
-                position += 1;   
+                position += 1;
             }
 
-            if (double.TryParse(sb.ToString(), out this.value))
+            if (double.TryParse(sb.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out this.value))
             {
                 endPosition = position;
             }
