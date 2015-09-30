@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MathParser.Tokens
 {
-    class DoubleToken : Token
+    internal class DoubleToken : Token
     {
         double value;
 
@@ -30,6 +30,7 @@ namespace MathParser.Tokens
         {
             return (symbol >= '0' && symbol <= '9');
         }
+
         public DoubleToken(string source, int position = 0)
         {
             StringBuilder sb = new StringBuilder();
@@ -59,5 +60,14 @@ namespace MathParser.Tokens
         }
 
         public double Value { get { return value; } }
+
+        public override Expression GetExpression(params Expression[] parameter)
+        {
+            return Expression.Constant(value);
+        }
+        public override TokenType TokenType
+        {
+            get { return TokenType.Value; }
+        }
     }
 }

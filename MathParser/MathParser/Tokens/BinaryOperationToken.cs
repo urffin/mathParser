@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace MathParser.Tokens
 {
-    abstract class BinaryOperationToken : Token
+    internal abstract class BinaryOperationToken : OperationToken
     {
+        private const int ArityBinaryOperation = 2;
         private static readonly Dictionary<char, Func<BinaryOperationToken>> operations = new Dictionary<char, Func<BinaryOperationToken>> {
             { '+', ()=>new PlusOperationToken() },
             { '-', () => new MinusOperationToken() },
@@ -16,12 +17,28 @@ namespace MathParser.Tokens
             { '/', () => new DivisionOperationToken() }
         };
 
-        public static bool IsStartSymbol(char symbol)
+        public static BinaryOperationToken GetOperation(char operationSymbol)
         {
-            return operations.ContainsKey(symbol);
-        }
-        public abstract int Priority { get; }
+            Func<BinaryOperationToken> tokenGenerator;
+            if (!operations.TryGetValue(operationSymbol, out tokenGenerator))
+            {
+                throw new ArgumentOutOfRangeException("operationSymbol", string.Format("Have not operation: '{0}'", operationSymbol));
+            }
 
+            return tokenGenerator();
+        }
+        public override Expression GetExpression(params Expression[] parameter)
+        {
+            if (parameter.Length != Arity)
+                throw new ArgumentException("Binary operation should take two parameters");
+
+            return GetExpression(parameter[0], parameter[1]);
+        }
+        public abstract Expression GetExpression(Expression left, Expression right);
+
+        public override int Arity { get { return ArityBinaryOperation; } }
+
+        #region built-in binary operation
         private class PlusOperationToken : BinaryOperationToken
         {
 
@@ -71,18 +88,7 @@ namespace MathParser.Tokens
             }
 
         }
+        #endregion
 
-        public static BinaryOperationToken GetOperation(char operationSymbol)
-        {
-            Func<BinaryOperationToken> tokenGenerator;
-            if (!operations.TryGetValue(operationSymbol, out tokenGenerator))
-            {
-                throw new ArgumentOutOfRangeException("operationSymbol", string.Format("Have not operation: '{0}'", operationSymbol));
-            }
-
-            return tokenGenerator();
-        }
-
-        public abstract Expression GetExpression(Expression left, Expression right);
     }
 }

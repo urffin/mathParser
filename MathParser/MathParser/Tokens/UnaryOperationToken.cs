@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 
 namespace MathParser.Tokens
 {
-    abstract class UnaryOperationToken : Token
+    internal abstract class UnaryOperationToken : OperationToken
     {
+        private const int ArityUnaryOperation = 1;
         private static readonly Dictionary<char, Func<UnaryOperationToken>> operations = new Dictionary<char, Func<UnaryOperationToken>> {
             { '+', () => new PlusOperationToken() },
             { '-', () => new MinusOperationToken() }
         };
-
-        public static bool IsStartSymbol(char symbol)
-        {
-            return operations.ContainsKey(symbol);
-        }
-        public abstract int Priority { get; }
-        public abstract Expression GetExpression(Expression expression);
         public static UnaryOperationToken GetOperation(char operationSymbol)
         {
             Func<UnaryOperationToken> tokenGenerator;
@@ -31,6 +25,18 @@ namespace MathParser.Tokens
             return tokenGenerator();
         }
 
+        public abstract Expression GetExpression(Expression expression);
+        public override Expression GetExpression(params Expression[] parameter)
+        {
+            if (parameter.Length != Arity)
+                throw new ArgumentException("Unary operation should take one parameter");
+
+            return GetExpression(parameter[0]);
+        }
+
+        public override int Arity { get { return ArityUnaryOperation; } }
+
+        #region built-in unary operation
         private class PlusOperationToken : UnaryOperationToken
         {
 
@@ -56,6 +62,7 @@ namespace MathParser.Tokens
             }
 
         }
+        #endregion
     }
 
 }

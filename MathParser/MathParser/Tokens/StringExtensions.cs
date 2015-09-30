@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace MathParser.Tokens
 {
-    static class StringExtensions
+    internal static class StringExtensions
     {
         internal static IEnumerable<Token> Tokinize(this string source, int position=0){
+            Token token=null;
             while (position < source.Length)
             {
-                Token token;
-                position = Token.GetNextToken(source, position, out token);
+                position = Token.GetNextToken(source, position, out token, token);
                 yield return token;
                 for (; position < source.Length && char.IsWhiteSpace(source[position]); position++) ;
             }
