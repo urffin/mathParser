@@ -37,7 +37,7 @@ namespace MathParser.Tokens
         {
             public OpenBracket(Token prevToken)
             {
-                if (prevToken != null && (prevToken.TokenType != TokenType.Operation || prevToken.TokenType != TokenType.OpenBracket))
+                if (prevToken != null && (prevToken.TokenType != TokenType.Operation && prevToken.TokenType != TokenType.OpenBracket))
                 {
                     throw new InvalidOperationException("Open bracket can't follow after: "+prevToken.TokenType);
                 }
