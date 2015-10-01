@@ -12,6 +12,11 @@ namespace MathParser
     {
         public static Expression<Func<double>> ParseWithoutParameter(string expression)
         {
+            return (Expression<Func<double>>)Parse(expression);
+        }
+
+        public static LambdaExpression Parse(string expression)
+        {
             Stack<OperationToken> operationStack = new Stack<OperationToken>();
             Stack<Expression> expressionStack = new Stack<Expression>();
 
@@ -43,7 +48,7 @@ namespace MathParser
             }
 
 
-            return Expression.Lambda<Func<double>>(expressionStack.Pop());
+            return Expression.Lambda(expressionStack.Pop());
         }
 
         private static void ProcessEndStack(Stack<OperationToken> operationStack, Stack<Expression> expressionStack)
