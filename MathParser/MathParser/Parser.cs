@@ -50,52 +50,45 @@ namespace MathParser
         {
             while (operationStack.Count > 0)
             {
-                var tokenFromStack = operationStack.Pop();
-                var tokenParameters = new Expression[tokenFromStack.Arity];
-                for (int i = tokenParameters.Length - 1; i >= 0; i--)
-                {
-                    tokenParameters[i] = expressionStack.Pop();
-                }
-                expressionStack.Push(tokenFromStack.GetExpression(tokenParameters));
+                ExecuteOperation(operationStack, expressionStack);
             }
 
         }
 
         private static void ProcessCloseToken(OperationToken operationToken, Stack<OperationToken> operationStack, Stack<Expression> expressionStack)
         {
-            do
+            while (operationStack.Count > 0 && operationStack.Peek().TokenType != TokenType.OpenBracket)
             {
-                var tokenFromStack = operationStack.Pop();
-                var tokenParameters = new Expression[tokenFromStack.Arity];
-                for (int i = tokenParameters.Length - 1; i >= 0; i--)
-                {
-                    tokenParameters[i] = expressionStack.Pop();
-                }
-                expressionStack.Push(tokenFromStack.GetExpression(tokenParameters));
+                ExecuteOperation(operationStack, expressionStack);
+            }
 
-            } while (operationStack.Peek().TokenType != TokenType.OpenBracket);
+            if (operationStack.Count == 0)
+            {
+                throw new InvalidOperationException("Try parse not opened close bracket");
+            }
 
             operationStack.Pop();
         }
 
         private static void ProcessOperationToken(OperationToken token, Stack<OperationToken> operationStack, Stack<Expression> expressionStack)
         {
-            if (operationStack.Count > 0 && operationStack.Peek().Priority > token.Priority)
+            while (operationStack.Count > 0 && operationStack.Peek().Priority > token.Priority)
             {
-                do
-                {
-                    var tokenFromStack = operationStack.Pop();
-                    var tokenParameters = new Expression[tokenFromStack.Arity];
-                    for (int i = tokenParameters.Length - 1; i >= 0; i--)
-                    {
-                        tokenParameters[i] = expressionStack.Pop();
-                    }
-                    expressionStack.Push(tokenFromStack.GetExpression(tokenParameters));
-
-                } while (operationStack.Count > 0 && operationStack.Peek().Priority > token.Priority);
+                ExecuteOperation(operationStack, expressionStack);
             }
 
             operationStack.Push(token);
+        }
+
+        private static void ExecuteOperation(Stack<OperationToken> operationStack, Stack<Expression> expressionStack)
+        {
+            var tokenFromStack = operationStack.Pop();
+            var tokenParameters = new Expression[tokenFromStack.Arity];
+            for (int i = tokenParameters.Length - 1; i >= 0; i--)
+            {
+                tokenParameters[i] = expressionStack.Pop();
+            }
+            expressionStack.Push(tokenFromStack.GetExpression(tokenParameters));
         }
     }
 }
