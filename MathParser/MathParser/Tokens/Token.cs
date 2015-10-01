@@ -18,21 +18,20 @@ namespace MathParser.Tokens
             if (DoubleToken.IsStartSymbol(symbol))
             {
                 token = new DoubleToken(source, position);
+                return token.endPosition;
             }
-            else if (BracketToken.IsStartSymbol(symbol))
+            
+            if (BracketToken.IsStartSymbol(symbol))
             {
                 token = BracketToken.GetBracket(symbol, prevToken);
-                token.endPosition = position + 1;
+                return position + 1;
             }
-            else if (OperationToken.IsStartSymbol(symbol))
+
+            if (OperationToken.IsStartSymbol(symbol))
             {
                 token = OperationToken.GetOperation(symbol, prevToken);
-                token.endPosition = position + 1;
+                return position + 1;
             }
-
-
-            if (token != null)
-                return token.endPosition;
 
             throw new ArgumentOutOfRangeException("symbol", symbol, "Unexpected symbol");
         }

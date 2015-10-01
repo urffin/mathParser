@@ -97,5 +97,18 @@ namespace UnitTest_MathParser
             string expression = "()";
             var parsedExpression = Parser.ParseWithoutParameter(expression);
         }
+
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        public void TestMethod_Parser_ParseFuncWithoutParams_NotOpenedCloseBracket()
+        {
+            string expression = "123)";
+            var parsedExpression = Parser.ParseWithoutParameter(expression);
+        }
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        public void TestMethod_Parser_ParseFuncWithoutParams_OpenBracketAfterValue()
+        {
+            string expression = "123(12-12)";
+            var parsedExpression = Parser.ParseWithoutParameter(expression);
+        }
     }
 }

@@ -47,7 +47,6 @@ namespace MathParser
                 throw new InvalidOperationException("Error parse expression: " + expression);
             }
 
-
             return Expression.Lambda(expressionStack.Pop());
         }
 
@@ -57,7 +56,6 @@ namespace MathParser
             {
                 ExecuteOperation(operationStack, expressionStack);
             }
-
         }
 
         private static void ProcessCloseToken(OperationToken operationToken, Stack<OperationToken> operationStack, Stack<Expression> expressionStack)
