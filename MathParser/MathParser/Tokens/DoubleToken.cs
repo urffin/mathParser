@@ -18,10 +18,7 @@ namespace MathParser.Tokens
         {
             if (symbol != DecimalSeparator) return (symbol >= '0' && symbol <= '9');
 
-            if (!isDecimalSeparatorSet && countSelectedChars > 0)
-            {
-                return isDecimalSeparatorSet = true;
-            }
+            if (!isDecimalSeparatorSet && countSelectedChars > 0) return isDecimalSeparatorSet = true;
 
             return false;
         }
@@ -36,22 +33,19 @@ namespace MathParser.Tokens
             StringBuilder sb = new StringBuilder();
 
             char symbol;
-            while (position < source.Length)
+            endPosition = position;
+            while (endPosition < source.Length)
             {
-                symbol = source[position];
-                if (!CheckSymbol(symbol,sb.Length)) break;
+                symbol = source[endPosition];
+                if (!CheckSymbol(symbol, sb.Length)) break;
 
                 sb.Append(symbol);
-                position += 1;
+                endPosition += 1;
             }
 
-            if (double.TryParse(sb.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out this.value))
+            if (!double.TryParse(sb.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out this.value))
             {
-                endPosition = position;
-            }
-            else
-            {
-                if (position == source.Length)
+                if (endPosition == source.Length)
                     throw new ArgumentException(string.Format("invalide double: '{0}'", sb.ToString()));
 
                 throw new ArgumentException(string.Format("unexpected symbol: '{0}'", source[position]));
