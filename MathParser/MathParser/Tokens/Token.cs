@@ -9,7 +9,6 @@ namespace MathParser.Tokens
 {
     internal abstract class Token
     {
-        protected int endPosition;
         public abstract TokenType TokenType { get; }
         internal static int GetNextToken(string source, int position, out Token token, Token prevToken = null)
         {
@@ -17,8 +16,8 @@ namespace MathParser.Tokens
             token = null;
             if (DoubleToken.IsStartSymbol(symbol))
             {
-                token = new DoubleToken(source, position);
-                return token.endPosition;
+                token = new DoubleToken(source, ref position);
+                return position;
             }
             
             if (BracketToken.IsStartSymbol(symbol))
@@ -31,6 +30,12 @@ namespace MathParser.Tokens
             {
                 token = OperationToken.GetOperation(symbol, prevToken);
                 return position + 1;
+            }
+
+            if (FunctionToken.IsStartSymbol(symbol))
+            {
+                token = new FunctionToken(source, ref position);
+                return position;
             }
 
             throw new ArgumentOutOfRangeException("symbol", symbol, "Unexpected symbol");

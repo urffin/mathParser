@@ -28,12 +28,11 @@ namespace MathParser.Tokens
             return (symbol >= '0' && symbol <= '9');
         }
 
-        public DoubleToken(string source, int position = 0)
+        public DoubleToken(string source, ref int endPosition)
         {
             StringBuilder sb = new StringBuilder();
 
             char symbol;
-            endPosition = position;
             while (endPosition < source.Length)
             {
                 symbol = source[endPosition];
@@ -48,7 +47,7 @@ namespace MathParser.Tokens
                 if (endPosition == source.Length)
                     throw new ArgumentException(string.Format("invalide double: '{0}'", sb.ToString()));
 
-                throw new ArgumentException(string.Format("unexpected symbol: '{0}'", source[position]));
+                throw new ArgumentException(string.Format("unexpected symbol: '{0}'", source[endPosition]));
             }
 
         }

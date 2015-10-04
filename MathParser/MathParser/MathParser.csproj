@@ -43,12 +43,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\BracketToken.cs" />
     <Compile Include="Tokens\DoubleToken.cs" />
-    <Compile Include="Tokens\BinaryOperationToken.cs" />
+    <Compile Include="Tokens\FunctionToken.cs" />
+    <Compile Include="Tokens\OperationTokenBinary.cs" />
     <Compile Include="Tokens\OperationToken.cs" />
     <Compile Include="Tokens\StringExtensions.cs" />
     <Compile Include="Tokens\Token.cs" />
     <Compile Include="Tokens\TokenType.cs" />
-    <Compile Include="Tokens\UnaryOperationToken.cs" />
+    <Compile Include="Tokens\OperationTokenUnary.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
