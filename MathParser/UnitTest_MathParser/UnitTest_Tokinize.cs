@@ -47,7 +47,7 @@ namespace UnitTest_MathParser
             var tokinize = expression.Tokinize().ToArray();
 
             Assert.AreEqual(tokinize.Length, 2, "expression contains two tokens");
-            Assert.IsInstanceOfType(tokinize[0], typeof(UnaryOperationToken), "first token not unary minus");
+            Assert.IsInstanceOfType(tokinize[0], typeof(OperationTokenUnary), "first token not unary minus");
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace UnitTest_MathParser
             var tokinize = expression.Tokinize().ToArray();
 
             Assert.AreEqual(tokinize.Length, 3, "expression contains three tokens");
-            Assert.IsInstanceOfType(tokinize[1], typeof(BinaryOperationToken), "first token not unary minus");
+            Assert.IsInstanceOfType(tokinize[1], typeof(OperationTokenBinary), "first token not unary minus");
         }
 
         [TestMethod]

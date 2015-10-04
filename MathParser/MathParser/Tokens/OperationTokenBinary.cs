@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace MathParser.Tokens
 {
-    internal abstract class BinaryOperationToken : OperationToken
+    internal abstract class OperationTokenBinary : OperationToken
     {
         private const int ArityBinaryOperation = 2;
-        private static readonly Dictionary<char, Func<BinaryOperationToken>> operations = new Dictionary<char, Func<BinaryOperationToken>> {
+        private static readonly Dictionary<char, Func<OperationTokenBinary>> operations = new Dictionary<char, Func<OperationTokenBinary>> {
             { '+', ()=>new PlusOperationToken() },
             { '-', () => new MinusOperationToken() },
             { '*', () => new MultiplyOperationToken() },
             { '/', () => new DivisionOperationToken() }
         };
 
-        public static BinaryOperationToken GetOperation(char operationSymbol)
+        public static OperationTokenBinary GetOperation(char operationSymbol)
         {
-            Func<BinaryOperationToken> tokenGenerator;
+            Func<OperationTokenBinary> tokenGenerator;
             if (!operations.TryGetValue(operationSymbol, out tokenGenerator))
             {
                 throw new ArgumentOutOfRangeException("operationSymbol", string.Format("Have not operation: '{0}'", operationSymbol));
@@ -39,7 +39,7 @@ namespace MathParser.Tokens
         public override int Arity { get { return ArityBinaryOperation; } }
 
         #region built-in binary operation
-        private class PlusOperationToken : BinaryOperationToken
+        private class PlusOperationToken : OperationTokenBinary
         {
 
             public override Expression GetExpression(Expression left, Expression right)
@@ -49,10 +49,10 @@ namespace MathParser.Tokens
 
             public override int Priority
             {
-                get { return 1; }
+                get { return OperationToken.LowPriority; }
             }
         }
-        private class MinusOperationToken : BinaryOperationToken
+        private class MinusOperationToken : OperationTokenBinary
         {
             public override Expression GetExpression(Expression left, Expression right)
             {
@@ -60,11 +60,11 @@ namespace MathParser.Tokens
             }
             public override int Priority
             {
-                get { return 1; }
+                get { return OperationToken.LowPriority; }
             }
 
         }
-        private class MultiplyOperationToken : BinaryOperationToken
+        private class MultiplyOperationToken : OperationTokenBinary
         {
             public override Expression GetExpression(Expression left, Expression right)
             {
@@ -72,11 +72,11 @@ namespace MathParser.Tokens
             }
             public override int Priority
             {
-                get { return 10; }
+                get { return OperationToken.MidPriority; }
             }
 
         }
-        private class DivisionOperationToken : BinaryOperationToken
+        private class DivisionOperationToken : OperationTokenBinary
         {
             public override Expression GetExpression(Expression left, Expression right)
             {
@@ -84,7 +84,7 @@ namespace MathParser.Tokens
             }
             public override int Priority
             {
-                get { return 10; }
+                get { return OperationToken.MidPriority; }
             }
 
         }

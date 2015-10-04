@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace MathParser.Tokens
 {
-    internal abstract class UnaryOperationToken : OperationToken
+    internal abstract class OperationTokenUnary : OperationToken
     {
         private const int ArityUnaryOperation = 1;
-        private static readonly Dictionary<char, Func<UnaryOperationToken>> operations = new Dictionary<char, Func<UnaryOperationToken>> {
+        private static readonly Dictionary<char, Func<OperationTokenUnary>> operations = new Dictionary<char, Func<OperationTokenUnary>> {
             { '+', () => new PlusOperationToken() },
             { '-', () => new MinusOperationToken() }
         };
-        public static UnaryOperationToken GetOperation(char operationSymbol)
+        public static OperationTokenUnary GetOperation(char operationSymbol)
         {
-            Func<UnaryOperationToken> tokenGenerator;
+            Func<OperationTokenUnary> tokenGenerator;
             if (!operations.TryGetValue(operationSymbol, out tokenGenerator))
             {
                 throw new ArgumentOutOfRangeException("operationSymbol", string.Format("Have not operation: '{0}'", operationSymbol));
@@ -37,7 +37,7 @@ namespace MathParser.Tokens
         public override int Arity { get { return ArityUnaryOperation; } }
 
         #region built-in unary operation
-        private class PlusOperationToken : UnaryOperationToken
+        private class PlusOperationToken : OperationTokenUnary
         {
 
             public override Expression GetExpression(Expression expression)
@@ -47,10 +47,10 @@ namespace MathParser.Tokens
 
             public override int Priority
             {
-                get { return 20; }
+                get { return OperationToken.HighPriority; }
             }
         }
-        private class MinusOperationToken : UnaryOperationToken
+        private class MinusOperationToken : OperationTokenUnary
         {
             public override Expression GetExpression(Expression expression)
             {
@@ -58,7 +58,7 @@ namespace MathParser.Tokens
             }
             public override int Priority
             {
-                get { return 20; }
+                get { return OperationToken.HighPriority; }
             }
 
         }

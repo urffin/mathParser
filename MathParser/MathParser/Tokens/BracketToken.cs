@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,12 +10,9 @@ namespace MathParser.Tokens
     internal abstract class BracketToken : OperationToken
     {
 
-        public override int Priority { get { return 0; } }
+        public override int Priority { get { return OperationToken.LowPriority; } }
 
-        public override System.Linq.Expressions.Expression GetExpression(params System.Linq.Expressions.Expression[] parameter)
-        {
-            throw new NotImplementedException();
-        }
+        public override System.Linq.Expressions.Expression GetExpression(params Expression[] parameter) { throw new NotImplementedException(); }
 
         public override int Arity { get { throw new NotImplementedException(); } }
 
@@ -39,7 +37,7 @@ namespace MathParser.Tokens
             {
                 if (prevToken != null && (prevToken.TokenType != TokenType.Operation && prevToken.TokenType != TokenType.OpenBracket))
                 {
-                    throw new InvalidOperationException("Open bracket can't follow after: "+prevToken.TokenType);
+                    throw new InvalidOperationException("Open bracket can't follow after: " + prevToken.TokenType);
                 }
             }
 

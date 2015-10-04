@@ -8,6 +8,11 @@ namespace MathParser.Tokens
 {
     internal abstract class OperationToken : Token
     {
+        protected const int LowestPriority = 0;
+        protected const int LowPriority = 1;
+        protected const int MidPriority = 10;
+        protected const int HighPriority = 20;
+
         private static HashSet<char> operationsSymbols = new HashSet<char>() { 
             '+','-','*','/'
         };
@@ -23,9 +28,9 @@ namespace MathParser.Tokens
         internal static Token GetOperation(char symbol, Token prevToken)
         {
             if (prevToken == null || prevToken.TokenType == TokenType.Operation || prevToken.TokenType == TokenType.OpenBracket)
-                return UnaryOperationToken.GetOperation(symbol);
+                return OperationTokenUnary.GetOperation(symbol);
 
-            return BinaryOperationToken.GetOperation(symbol);
+            return OperationTokenBinary.GetOperation(symbol);
         }
     }
 }
