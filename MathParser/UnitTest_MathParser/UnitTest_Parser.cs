@@ -110,5 +110,20 @@ namespace UnitTest_MathParser
             string expression = "123(12-12)";
             var parsedExpression = Parser.ParseWithoutParameter(expression);
         }
+
+        [TestMethod]
+        public void TestMethod_Parser_ParseBuiltIntFuncExp()
+        {
+            string expFunction = "exp(10)";
+
+            var parsedExpression = Parser.ParseWithoutParameter(expFunction);
+
+            Debug.WriteLine(parsedExpression);
+
+            Func<double> result = parsedExpression.Compile();
+
+            Assert.AreEqual(Math.Exp(10), result(), 0.0001);
+
+        }
     }
 }

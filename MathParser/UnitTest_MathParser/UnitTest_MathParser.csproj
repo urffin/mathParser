@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="UnitTestFunctionToken.cs" />
     <Compile Include="UnitTest_Parser.cs" />
     <Compile Include="UnitTest_Tokinize.cs" />
     <Compile Include="UnitTest_DoubleToken.cs" />
