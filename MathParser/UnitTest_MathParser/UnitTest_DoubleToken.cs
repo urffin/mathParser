@@ -38,12 +38,12 @@ namespace UnitTest_MathParser
             Assert.AreEqual(45.6, token.Value);
 
         }
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void TestMethod_NewDoubleToken_DoubleStringWithError()
         {
             string doubleString = ".123.456";
             int position = 0;
-            var token = new DoubleToken(doubleString, ref position);
+            Assert.IsFalse(DoubleToken.IsStartSymbol(doubleString[position]));
 
         }
 

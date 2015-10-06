@@ -9,6 +9,9 @@ namespace MathParser.Tokens
 {
     internal abstract class Token
     {
+
+
+
         public abstract TokenType TokenType { get; }
         internal static int GetNextToken(string source, int position, out Token token, Token prevToken = null)
         {

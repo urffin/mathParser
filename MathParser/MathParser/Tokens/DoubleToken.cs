@@ -14,11 +14,11 @@ namespace MathParser.Tokens
 
         bool isDecimalSeparatorSet = false;
         private readonly char DecimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
-        protected bool CheckSymbol(char symbol, int countSelectedChars)
+        protected bool CheckSymbol(char symbol)
         {
             if (symbol != DecimalSeparator) return (symbol >= '0' && symbol <= '9');
 
-            if (!isDecimalSeparatorSet && countSelectedChars > 0) return isDecimalSeparatorSet = true;
+            if (!isDecimalSeparatorSet) return isDecimalSeparatorSet = true;
 
             return false;
         }
@@ -36,7 +36,7 @@ namespace MathParser.Tokens
             while (endPosition < source.Length)
             {
                 symbol = source[endPosition];
-                if (!CheckSymbol(symbol, sb.Length)) break;
+                if (!CheckSymbol(symbol)) break;
 
                 sb.Append(symbol);
                 endPosition += 1;
