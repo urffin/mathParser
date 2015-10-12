@@ -56,9 +56,8 @@ namespace UnitTest_MathParser
             string expression = "12-123";
 
             var tokinize = expression.Tokinize().ToArray();
-
             Assert.AreEqual(tokinize.Length, 3, "expression contains three tokens");
-            Assert.IsInstanceOfType(tokinize[1], typeof(OperationTokenBinary), "first token not unary minus");
+            Assert.IsInstanceOfType(tokinize[1], typeof(OperationTokenBinary.MinusOperationToken), "token not binary minus");
         }
 
         [TestMethod]

@@ -10,23 +10,6 @@ namespace MathParser.Tokens
     internal abstract class OperationTokenBinary : OperationToken
     {
         private const int ArityBinaryOperation = 2;
-        private static readonly Dictionary<char, Func<OperationTokenBinary>> operations = new Dictionary<char, Func<OperationTokenBinary>> {
-            { '+', ()=>new PlusOperationToken() },
-            { '-', () => new MinusOperationToken() },
-            { '*', () => new MultiplyOperationToken() },
-            { '/', () => new DivisionOperationToken() }
-        };
-
-        public static OperationTokenBinary GetOperation(char operationSymbol)
-        {
-            Func<OperationTokenBinary> tokenGenerator;
-            if (!operations.TryGetValue(operationSymbol, out tokenGenerator))
-            {
-                throw new ArgumentOutOfRangeException("operationSymbol", string.Format("Have not operation: '{0}'", operationSymbol));
-            }
-
-            return tokenGenerator();
-        }
         public override Expression GetExpression(params Expression[] parameter)
         {
             if (parameter.Length != Arity)
@@ -39,7 +22,7 @@ namespace MathParser.Tokens
         public override int Arity { get { return ArityBinaryOperation; } }
 
         #region built-in binary operation
-        private class PlusOperationToken : OperationTokenBinary
+        internal class PlusOperationToken : OperationTokenBinary
         {
 
             public override Expression GetExpression(Expression left, Expression right)
@@ -52,7 +35,7 @@ namespace MathParser.Tokens
                 get { return OperationToken.LowPriority; }
             }
         }
-        private class MinusOperationToken : OperationTokenBinary
+        internal class MinusOperationToken : OperationTokenBinary
         {
             public override Expression GetExpression(Expression left, Expression right)
             {
@@ -64,7 +47,7 @@ namespace MathParser.Tokens
             }
 
         }
-        private class MultiplyOperationToken : OperationTokenBinary
+        internal class MultiplyOperationToken : OperationTokenBinary
         {
             public override Expression GetExpression(Expression left, Expression right)
             {
@@ -76,7 +59,7 @@ namespace MathParser.Tokens
             }
 
         }
-        private class DivisionOperationToken : OperationTokenBinary
+        internal class DivisionOperationToken : OperationTokenBinary
         {
             public override Expression GetExpression(Expression left, Expression right)
             {

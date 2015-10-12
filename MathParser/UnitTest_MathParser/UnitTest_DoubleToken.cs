@@ -12,7 +12,7 @@ namespace UnitTest_MathParser
         {
             string intString = "123";
             int position = 0;
-            var token = new DoubleToken(intString, ref position);
+            var token = new DoubleToken().FromString(intString, ref position) as DoubleToken;
 
             Assert.AreEqual(123D, token.Value);
         }
@@ -22,7 +22,7 @@ namespace UnitTest_MathParser
         {
             string doubleString = "123.456";
             int position = 0;
-            var token = new DoubleToken(doubleString, ref position);
+            var token = new DoubleToken().FromString(doubleString, ref position) as DoubleToken;
 
             Assert.AreEqual(123.456, token.Value);
 
@@ -33,7 +33,7 @@ namespace UnitTest_MathParser
         {
             string doubleString = "123.45.6";
             int position = 4;
-            var token = new DoubleToken(doubleString, ref position);
+            var token = new DoubleToken().FromString(doubleString, ref position) as DoubleToken;
 
             Assert.AreEqual(45.6, token.Value);
 

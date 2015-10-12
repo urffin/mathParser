@@ -14,7 +14,7 @@ namespace MathParser.Tokens
 
         bool isDecimalSeparatorSet = false;
         private readonly char DecimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
-        protected bool CheckSymbol(char symbol)
+        protected override bool CheckSymbol(char symbol)
         {
             if (symbol != DecimalSeparator) return (symbol >= '0' && symbol <= '9');
 
@@ -22,34 +22,18 @@ namespace MathParser.Tokens
 
             return false;
         }
-
+        public override bool AllowUnaryAfter
+        {
+            get { return false; }
+        }
         public static bool IsStartSymbol(char symbol)
         {
             return (symbol >= '0' && symbol <= '9');
         }
 
-        public DoubleToken(string source, ref int endPosition)
+        protected override bool CheckLexem(string lexem)
         {
-            StringBuilder sb = new StringBuilder();
-
-            char symbol;
-            while (endPosition < source.Length)
-            {
-                symbol = source[endPosition];
-                if (!CheckSymbol(symbol)) break;
-
-                sb.Append(symbol);
-                endPosition += 1;
-            }
-
-            if (!double.TryParse(sb.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out this.value))
-            {
-                if (endPosition == source.Length)
-                    throw new ArgumentException(string.Format("invalide double: '{0}'", sb.ToString()));
-
-                throw new ArgumentException(string.Format("unexpected symbol: '{0}'", source[endPosition]));
-            }
-
+            return double.TryParse(lexem, NumberStyles.Float, CultureInfo.InvariantCulture, out this.value);
         }
 
         public double Value { get { return value; } }

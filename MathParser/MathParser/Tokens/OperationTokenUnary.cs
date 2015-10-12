@@ -10,20 +10,6 @@ namespace MathParser.Tokens
     internal abstract class OperationTokenUnary : OperationToken
     {
         private const int ArityUnaryOperation = 1;
-        private static readonly Dictionary<char, Func<OperationTokenUnary>> operations = new Dictionary<char, Func<OperationTokenUnary>> {
-            { '+', () => new PlusOperationToken() },
-            { '-', () => new MinusOperationToken() }
-        };
-        public static OperationTokenUnary GetOperation(char operationSymbol)
-        {
-            Func<OperationTokenUnary> tokenGenerator;
-            if (!operations.TryGetValue(operationSymbol, out tokenGenerator))
-            {
-                throw new ArgumentOutOfRangeException("operationSymbol", string.Format("Have not operation: '{0}'", operationSymbol));
-            }
-
-            return tokenGenerator();
-        }
 
         public abstract Expression GetExpression(Expression expression);
         public override Expression GetExpression(params Expression[] parameter)
@@ -37,7 +23,7 @@ namespace MathParser.Tokens
         public override int Arity { get { return ArityUnaryOperation; } }
 
         #region built-in unary operation
-        private class PlusOperationToken : OperationTokenUnary
+        internal class PlusOperationToken : OperationTokenUnary
         {
 
             public override Expression GetExpression(Expression expression)
@@ -50,7 +36,7 @@ namespace MathParser.Tokens
                 get { return OperationToken.HighPriority; }
             }
         }
-        private class MinusOperationToken : OperationTokenUnary
+        internal class MinusOperationToken : OperationTokenUnary
         {
             public override Expression GetExpression(Expression expression)
             {

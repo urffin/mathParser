@@ -20,30 +20,17 @@ namespace MathParser.Tokens
         }
 
         private MethodInfo functionMethod;
-        public FunctionToken(string source, ref int endPosition)
+
+
+        protected override bool CheckLexem(string lexem)
         {
-            StringBuilder sb = new StringBuilder();
-
-            char symbol;
-            while (endPosition < source.Length)
-            {
-                symbol = source[endPosition];
-                if (!CheckSymbol(symbol)) break;
-
-                sb.Append(symbol);
-                endPosition += 1;
-            }
-
-            if (!builtInFunctions.TryGetValue(sb.ToString(), out functionMethod))
-            {
-                if (endPosition == source.Length)
-                    throw new ArgumentException(string.Format("invalide function: '{0}'", sb.ToString()));
-
-                throw new ArgumentException(string.Format("unexpected symbol: '{0}'", source[endPosition]));
-            }
+            return builtInFunctions.TryGetValue(lexem, out functionMethod);
         }
-
-        private bool CheckSymbol(char symbol)
+        public override bool AllowUnaryAfter
+        {
+            get { return false; }
+        }
+        protected override bool CheckSymbol(char symbol)
         {
             return Char.IsLetter(symbol);
         }
