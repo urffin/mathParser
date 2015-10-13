@@ -17,5 +17,22 @@ namespace MathParser.Tokens
                 for (; position < source.Length && char.IsWhiteSpace(source[position]); position++) ;
             }
         }
+
+        internal static IEnumerable<string> ToLexem(this string source){
+            return null;
+            int endPosition = 0;
+            StringBuilder sb = new StringBuilder();
+
+            char symbol;
+            while (endPosition < source.Length)
+            {
+                symbol = source[endPosition];
+                //if (!CheckSymbol(symbol)) break;
+
+                sb.Append(symbol);
+                endPosition += 1;
+            }
+        }
+
     }
 }
