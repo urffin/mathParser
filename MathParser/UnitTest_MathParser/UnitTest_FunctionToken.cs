@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTest_MathParser
 {
     [TestClass]
-    public class UnitTestFunctionToken
+    public class UnitTest_FunctionToken
     {
         [TestMethod]
         public void TestMethod_NewFunctionToken()
