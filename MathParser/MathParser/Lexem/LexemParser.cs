@@ -8,7 +8,10 @@ namespace MathParser.Lexem
 {
     internal class LexemParser
     {
-        private readonly static HashSet<char> specialChars = new HashSet<char>() { '+', '-', '*', '/', '(', ')', ',' };
+        private readonly static Dictionary<char, IEnumerable<string>> specials = (from spec in new[] { "+", "-", "*", "/", "(", ")", ",", "**" }
+                                                                     group spec by spec[0] into g
+                                                                     select new KeyValuePair<char, IEnumerable<string>>(g.Key, g))
+                                                                   .ToDictionary(el => el.Key, el => el.Value);
 
         private string source;
         private int position;
@@ -21,14 +24,19 @@ namespace MathParser.Lexem
 
         public bool GetNextLexem(out Lexem lexem)
         {
-            StringBuilder sb = new StringBuilder();
 
+            return TryGetSpecial(out lexem) || TryGetLexem(out lexem);
+        }
+
+        private bool TryGetLexem(out Lexem lexem)
+        {
+            StringBuilder sb = new StringBuilder();
             char symbol;
             while (position < source.Length)
             {
                 symbol = source[position];
                 sb.Append(symbol);
-                if (specialChars.Contains(symbol))
+                if (specials.ContainsKey(symbol))
                 {
                     position += (sb.Length == 0) ? 1 : 0;
                     lexem = new Lexem(sb.ToString(), position);
@@ -41,6 +49,11 @@ namespace MathParser.Lexem
             }
             lexem = null;
             return false;
+        }
+
+        private bool TryGetSpecial(out Lexem lexem)
+        {
+            throw new NotImplementedException();
         }
     }
 }
